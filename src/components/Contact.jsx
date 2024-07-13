@@ -30,7 +30,6 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    
 
     emailjs
       .send(
@@ -43,12 +42,12 @@ const Contact = () => {
           to_email: "Hassan_siala@hotmail.com",
           message: form.message,
         },
-        import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
+        import.meta.env.VITE_APP_EMAILJS_USER_ID  // Ensure this is the correct variable
       )
       .then(
         () => {
           setLoading(false);
-          alert("Thank you. I Will get back to you as soon as possible.");
+          alert("Thank you. I will get back to you as soon as possible.");
 
           setForm({
             name: "",
