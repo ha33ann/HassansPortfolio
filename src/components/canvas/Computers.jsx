@@ -32,17 +32,17 @@ const Computers = ({ isMobile }) => {
 const ComputersCanvas = () => {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    return () => {
-      const mediaQuery = window.matchMedia("(max-width: 500px)");
-      setIsMobile(mediaQuery.matches);
+    const mediaQuery = window.matchMedia("(max-width: 500px)");
+    setIsMobile(mediaQuery.matches);
 
-      const handleMediaQueryChange = (event) => {
-        setIsMobile(event.matches);
-      };
-      mediaQuery.addEventListener("change", handleMediaQueryChange);
-      return () => {
-        mediaQuery.removeEventListener("change", handleMediaQueryChange);
-      };
+    const handleMediaQueryChange = (event) => {
+      setIsMobile(event.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaQueryChange);
     };
   }, []);
   return (
