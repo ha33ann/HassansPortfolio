@@ -25,7 +25,7 @@ const Computers = ({ isMobile }) => {
         scale={isMobile ? 0.30 : 0.75}
         // Adjusted mobile position:
         // [0, -1.5, -1.0] -> Moves it UP (from -3 to -1.5) and centers it horizontally (tweaking Z axis)
-        position={isMobile ? [0, -1.5, -0.5] : [0, -3.25, -1.5]}
+        position={isMobile ? [0, -1.5, -0.5] : [0, -2.75, -1.5]}
         rotation={[-0.01, -0.2, -0.1]}
       />
     </mesh>
