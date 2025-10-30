@@ -22,7 +22,7 @@ const Computers = ({ isMobile }) => {
       <primitive
         object={computer.scene}
         // Adjusted scale for mobile to be slightly larger and easier to see
-        scale={isMobile ? 0.30 : 0.75}
+        scale={isMobile ? 0.35 : 0.75}
         // Adjusted mobile position:
         // [0, -1.5, -1.0] -> Moves it UP (from -3 to -1.5) and centers it horizontally (tweaking Z axis)
         position={isMobile ? [0, -1.5, -0.5] : [0, -2.75, -1.5]}
