@@ -1,11 +1,48 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
+import * as THREE from "three";
 
 import CanvasLoader from "../Loader";
 
 const Computers = ({ isMobile }) => {
   const computer = useGLTF("./desktop_pc/scene.gltf");
+
+  useMemo(() => {
+    // Traverse the scene to find any meshes with invalid geometry
+    computer.scene.traverse((child) => {
+      if (child.isMesh) {
+        const geometry = child.geometry;
+        if (geometry && geometry.attributes && geometry.attributes.position) {
+          const positions = geometry.attributes.position.array;
+          let hasNaN = false;
+          // Check for NaN in position attribute
+          for (let i = 0; i < positions.length; i++) {
+            if (isNaN(positions[i])) {
+              hasNaN = true;
+              break;
+            }
+          }
+
+          if (hasNaN) {
+            console.warn(`Cleaned up mesh with NaN positions: ${child.name}`);
+            // Replace the corrupted attribute with valid zeros
+            const safePositions = new Float32Array(positions.length).fill(0);
+            geometry.setAttribute('position', new THREE.BufferAttribute(safePositions, 3));
+            
+            // Recompute bounding sphere with safe data
+            geometry.computeBoundingSphere();
+
+            // Still hide it because the data is garbage
+            child.visible = false;
+          } else {
+             // Ensure bounding sphere is computed if it wasn't
+             geometry.computeBoundingSphere();
+          }
+        }
+      }
+    });
+  }, [computer]);
 
   return (
     <mesh>
@@ -73,8 +110,6 @@ const ComputersCanvas = () => {
         />
         <Computers isMobile={isMobile} />
       </Suspense>
-
-      <Preload all />
     </Canvas>
   );
 };
